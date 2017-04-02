@@ -10,7 +10,8 @@ if you're getting down and dirty.
 from collections import defaultdict
 import sys
 
-import xcb.xproto as xproto
+#~ import xcb.xproto as xproto
+import xcffib.xproto as xproto
 
 from xpybutil import conn, root, event
 from xpybutil.keysymdef import keysyms, keysym_strings
@@ -76,7 +77,7 @@ def bind_key(event_type, wid, key_string, cb):
     key = (wid, mods, kc)
 
     if not kc:
-        print >> sys.stderr, 'Could not find a keycode for %s' % key_string
+        print('Could not find a keycode for %s' % key_string, file=sys.stderr)
         return False
 
     if not __keygrabs[key] and not grab_key(wid, mods, kc):

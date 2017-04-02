@@ -11,7 +11,7 @@ import struct
 import xcb.xproto
 
 from xpybutil import conn as c
-import util
+from . import util
 
 __atoms = ['WM_PROTOCOLS', 'WM_TAKE_FOCUS', 'WM_SAVE_YOURSELF',
            'WM_DELETE_WINDOW', 'WM_COLORMAP_WINDOWS', 'WM_STATE']

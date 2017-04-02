@@ -8,8 +8,8 @@ import struct
 import sys
 import traceback
 
-import xcb
-import xcb.xproto as xproto
+import xcffib
+import xcffib.xproto as xproto
 
 from xpybutil import conn, root, util
 
@@ -19,7 +19,7 @@ EM = xproto.EventMask
 
 
 if sys.version_info[0] >= 3:
-    basestring = str
+    str = str
 
 
 class Event(object):
@@ -70,14 +70,14 @@ def send_event_checked(destination, event_mask, event, propagate=False):
 def pack_client_message(window, message_type, *data):
     assert len(data) <= 5
 
-    if isinstance(message_type, basestring):
+    if isinstance(message_type, str):
         message_type = util.get_atom(message_type)
 
     data = list(data)
     data += [0] * (5 - len(data))
 
     # Taken from
-    # http://xcb.freedesktop.org/manual/structxcb__client__message__event__t.html
+    # http://xcffib.freedesktop.org/manual/structxcffib__client__message__event__t.html
     return struct.pack('BBH7I', Event.ClientMessageEvent, 32, 0, window,
                        message_type, *data)
 
@@ -146,11 +146,11 @@ def main():
                     w = e.owner
                 elif hasattr(e, 'requestor'):
                     w = e.requestor
-
+                print(e.__class__,w)
                 key = (e.__class__, w)
                 for cb in __callbacks.get(key, []):
                     cb(e)
-    except xcb.Exception:
+    except xcffib.Exception:
         traceback.print_exc()
         sys.exit(1)
 

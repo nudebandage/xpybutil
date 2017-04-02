@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-import xcb.xproto
+import xcffib.xproto
 
 import xpybutil
 import xpybutil.event as event
@@ -42,7 +42,7 @@ def do_mark_window(letter):
 
 def do_goto_window(letter):
     if letter not in marked:
-        print >> sys.stderr, 'mark %s does not exist' % letter
+        print('mark %s does not exist' % letter, file=sys.stderr)
         return
 
     wid = marked[letter]
@@ -54,8 +54,8 @@ def do_goto_window(letter):
         if wdesk is not None and wdesk not in visibles:
             ewmh.request_current_desktop_checked(wdesk).check()
         ewmh.request_active_window_checked(wid, source=1).check()
-    except xcb.xproto.BadWindow:
-        print >> sys.stderr, '%d no longer exists' % wid
+    except xcffib.xproto.BadWindow:
+        print('%d no longer exists' % wid, file=sys.stderr)
 
 def mark_window():
     start_get_letter(do_mark_window)
@@ -66,7 +66,7 @@ def goto_window():
 def start_get_letter(cb):
     global grabbing
 
-    GS = xcb.xproto.GrabStatus
+    GS = xcffib.xproto.GrabStatus
     if keybind.grab_keyboard(xpybutil.root).status == GS.Success:
         grabbing = cb
 
@@ -86,14 +86,14 @@ def cb_get_letter(e):
 # This has to come first so it is called first in the event loop
 event.connect('KeyPress', xpybutil.root, cb_get_letter)
 
-for key_str, fun_str in keybinds.iteritems():
+for key_str, fun_str in keybinds.items():
     if fun_str not in globals():
-        print >> sys.stderr, 'No such function %s for %s' % (fun_str, key_str)
+        print('No such function %s for %s' % (fun_str, key_str), file=sys.stderr)
         continue
 
     fun = globals()[fun_str]
     if not keybind.bind_global_key('KeyPress', key_str, fun):
-        print >> sys.stderr, 'Could not bind %s to %s' % (key_str, fun_str)
+        print('Could not bind %s to %s' % (key_str, fun_str), file=sys.stderr)
 
 event.main()
 

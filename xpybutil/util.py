@@ -5,7 +5,8 @@ heavily used throughout the rest of xpybutil.
 """
 import struct
 
-import xcb.xproto
+#~ import xcffib.xproto
+import xcffib.xproto
 
 from xpybutil import conn
 
@@ -79,7 +80,7 @@ def get_property_value(property_reply):
     'get_atom_name' over this list if that's the case.
 
     :param property_reply: An object returned by a cookie's "reply" method.
-    :type property_reply: xcb.xproto.GetPropertyReply
+    :type property_reply: xcffib.xproto.GetPropertyReply
     :return: Either a string, a list of strings or a list of integers depending
              upon the format of the property reply.
     """
@@ -117,12 +118,12 @@ def get_property(window, atom):
     :type window: int
     :param atom: An atom identifier.
     :type atom: int OR str
-    :rtype: xcb.xproto.GetPropertyCookie
+    :rtype: xcffib.xproto.GetPropertyCookie
     """
-    if isinstance(atom, basestring):
+    if isinstance(atom, str):
         atom = get_atom(atom)
     return conn.core.GetProperty(False, window, atom,
-                                 xcb.xproto.GetPropertyType.Any, 0,
+                                 xcffib.xproto.GetPropertyType.Any, 0,
                                  2 ** 32 - 1)
 
 def get_property_unchecked(window, atom):
@@ -137,12 +138,12 @@ def get_property_unchecked(window, atom):
     :type window: int
     :param atom: An atom identifier.
     :type atom: int OR str
-    :rtype: xcb.xproto.GetPropertyCookie
+    :rtype: xcffib.xproto.GetPropertyCookie
     """
-    if isinstance(atom, basestring):
+    if isinstance(atom, str):
         atom = get_atom(atom)
     return conn.core.GetPropertyUnchecked(False, window, atom,
-                                          xcb.xproto.GetPropertyType.Any, 0,
+                                          xcffib.xproto.GetPropertyType.Any, 0,
                                           2 ** 32 - 1)
 
 def build_atom_cache(atoms):
@@ -168,7 +169,7 @@ def build_atom_cache(atoms):
         if isinstance(__atom_cache[atom], AtomCookie):
             __atom_cache[atom] = __atom_cache[atom].reply()
 
-    __atom_nm_cache = dict((v, k) for k, v in __atom_cache.items())
+    __atom_nm_cache = dict((v, k) for k, v in list(__atom_cache.items()))
 
 def get_atom(atom_name, only_if_exists=False):
     """
@@ -224,7 +225,7 @@ def __get_atom_cookie(atom_name, only_if_exists=False):
 
     :type atom_name: str
     :type only_if_exists: bool
-    :rtype: xcb.xproto.InternAtomCookie
+    :rtype: xcffib.xproto.InternAtomCookie
     """
     atom_bytes = atom_name.encode('ascii')
     atom = conn.core.InternAtomUnchecked(only_if_exists, len(atom_bytes),
@@ -236,7 +237,7 @@ def __get_atom_name_cookie(atom):
     Private function that issues the xpyb call to get an ATOM identifier's name.
 
     :type atom: int
-    :rtype: xcb.xproto.GetAtomNameCookie
+    :rtype: xcffib.xproto.GetAtomNameCookie
     """
     return AtomNameCookie(conn.core.GetAtomNameUnchecked(atom))
 

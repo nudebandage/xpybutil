@@ -1,9 +1,10 @@
-import xcb, xcb.xproto
-
+#import xcb, xcb.xproto
+import xcffib
+import xcffib.xproto as xproto
 try:
-    conn = xcb.connect()
+    conn = xcffib.connect()
     root = conn.get_setup().roots[0].root
-except xcb.ConnectException:
+except xcffib.ConnectException:
     conn = None
     root = None
 

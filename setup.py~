@@ -4,7 +4,7 @@ from distutils import sysconfig
 from distutils.core import setup
 
 try:
-    import xcffib.xproto, xcffib, xcffib.xinerama, xcffib.randr
+    import xcffib.xproto, xcffib.xcb, xcffib.xinerama, xcffib.randr
 except:
     print ('')
     print ('xpybutil requires the Xcffib python bindings')
