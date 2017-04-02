@@ -1,7 +1,5 @@
 import sys
-
-from distutils import sysconfig
-from distutils.core import setup
+from setuptools import setup
 
 try:
     import xcffib.xproto, xcffib, xcffib.xinerama, xcffib.randr
@@ -13,7 +11,7 @@ except:
     sys.exit(1)
 
 setup(
-    name = "xpybutil",
+    name = "uncrumpled_xpybutil",
     author = "Andrew Gallant",
     author_email = "andrew@pytyle.com",
     version = "0.0.1",
